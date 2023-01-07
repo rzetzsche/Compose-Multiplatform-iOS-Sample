@@ -8,7 +8,7 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
 @Composable
-fun App() {
+internal fun App() {
     val navigator = rememberNavigator()
     NavHost(
         navigator = navigator,
