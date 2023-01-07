@@ -18,11 +18,11 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = androidVersions.versions.compileSdk.get().toInt()
     defaultConfig {
         applicationId = "com.plauzeware.compose_mp_ios"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = androidVersions.versions.minSdk.get().toInt()
+        targetSdk = androidVersions.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
     }

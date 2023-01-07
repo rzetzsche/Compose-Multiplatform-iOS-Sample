@@ -7,7 +7,6 @@ plugins {
 }
 
 version = "1.0-SNAPSHOT"
-val ktorVersion = extra["ktor.version"]
 
 kotlin {
     android()
@@ -34,7 +33,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-core:${libs.versions.ktor.get()}")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -48,7 +47,7 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.5.1")
                 implementation("androidx.core:core-ktx:1.9.0")
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("io.ktor:ktor-client-okhttp:${libs.versions.ktor.get()}")
                 implementation(compose.ui)
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
@@ -56,7 +55,7 @@ kotlin {
         }
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+                implementation("io.ktor:ktor-client-darwin:${libs.versions.ktor.get()}")
             }
         }
 //        val iosTest by getting
@@ -73,7 +72,7 @@ kotlin {
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}")
             }
         }
         val jsMain by getting {
@@ -82,20 +81,20 @@ kotlin {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation("io.ktor:ktor-client-js:${libs.versions.ktor.get()}")
             }
         }
     }
 }
 
 android {
-    compileSdk = 33
+    compileSdk = androidVersions.versions.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDir("src/commonMain/resources")
     defaultConfig {
-        minSdk = 24
-        targetSdk = 33
+        minSdk = androidVersions.versions.minSdk.get().toInt()
+        targetSdk = androidVersions.versions.targetSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

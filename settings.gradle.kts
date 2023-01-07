@@ -1,3 +1,20 @@
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("androidVersions") {
+            version("minSdk", "26")
+            version("compileSdk", "33")
+            version("targetSdk", "33")
+            version("agpVersion", extra.get("agpVersion").toString())
+        }
+        create("libs") {
+            version("kotlinVersion", extra.get("kotlinVersion").toString())
+            version("ktor", "2.2.2")
+            version("coroutines", "1.6.4")
+            version("jb-compose", extra.get("composeVersion").toString())
+        }
+    }
+}
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -5,21 +22,24 @@ pluginManagement {
         google()
     }
 
-    plugins {
-        val kotlinVersion = extra["kotlin.version"] as String
-        val agpVersion = extra["agp.version"] as String
-        val composeVersion = extra["compose.version"] as String
+    // define dependencies which are used in plugins and dependencies
+    extra.set("kotlinVersion", "1.7.20")
+    extra.set("agpVersion", "7.3.1")
+    extra.set("composeVersion", "1.3.0-rc01")
 
-        kotlin("jvm").version(kotlinVersion)
-        kotlin("multiplatform").version(kotlinVersion)
-        kotlin("plugin.serialization").version(kotlinVersion)
-        kotlin("android").version(kotlinVersion)
-        id("com.android.base").version(agpVersion)
-        id("com.android.application").version(agpVersion)
-        id("com.android.library").version(agpVersion)
-        id("org.jetbrains.compose").version(composeVersion)
+    plugins {
+        kotlin("jvm").version(extra.get("kotlinVersion").toString())
+        kotlin("multiplatform").version(extra.get("kotlinVersion").toString())
+        kotlin("plugin.serialization").version(extra.get("kotlinVersion").toString())
+        kotlin("android").version(extra.get("kotlinVersion").toString())
+        id("com.android.base").version(extra.get("agpVersion").toString())
+        id("com.android.application").version(extra.get("agpVersion").toString())
+        id("com.android.library").version(extra.get("agpVersion").toString())
+        id("org.jetbrains.compose").version(extra.get("composeVersion").toString())
     }
 }
+
+
 
 rootProject.name = "compose_mp_ios"
 
