@@ -7,6 +7,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
+/// composable methods in common have to be internal
 @Composable
 internal fun App() {
     val navigator = rememberNavigator()
