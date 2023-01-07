@@ -11,7 +11,7 @@ version = "1.0-SNAPSHOT"
 kotlin {
     android()
     jvm("desktop")
-    ios()
+    iosArm64()
     js(IR) {
         browser()
         binaries.executable()
@@ -41,6 +41,7 @@ kotlin {
                 implementation("org.jetbrains.compose.components:components-resources:1.3.0-beta04-dev879")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
                 api("moe.tlaster:precompose:1.3.13")
+                implementation("org.kodein.di:kodein-di:${libs.versions.kodein.get()}")
             }
         }
         val androidMain by getting {
@@ -53,9 +54,10 @@ kotlin {
                 implementation(compose.uiTooling)
             }
         }
-        val iosMain by getting {
+        val iosArm64Main by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${libs.versions.ktor.get()}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:${libs.versions.coroutines.get()}")
             }
         }
 //        val iosTest by getting
@@ -71,7 +73,7 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${libs.versions.coroutines.get()}")
                 implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}")
             }
         }
@@ -80,7 +82,7 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.web.core)
                 implementation(compose.runtime)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${libs.versions.coroutines.get()}")
                 implementation("io.ktor:ktor-client-js:${libs.versions.ktor.get()}")
             }
         }
