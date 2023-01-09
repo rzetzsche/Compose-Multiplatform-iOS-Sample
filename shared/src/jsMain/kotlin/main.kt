@@ -2,7 +2,7 @@
 @file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE", "EXPOSED_PARAMETER_TYPE")
 
 import androidx.compose.ui.native.ComposeLayer
-import com.plauzeware.compose_mp_ios.MainWebView
+import com.plauzeware.compose_mp_ios.App
 import kotlinx.browser.document
 import kotlinx.browser.window
 import moe.tlaster.precompose.preComposeWindow
@@ -45,7 +45,7 @@ fun main() {
                 composableResize(layer = layer)
             })
 
-            MainWebView()
+            App()
         }
     }
 }
