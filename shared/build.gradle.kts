@@ -11,7 +11,32 @@ version = "1.0-SNAPSHOT"
 kotlin {
     android()
     jvm("desktop")
-    iosArm64()
+    iosArm64("uikitArm64") {
+        binaries {
+            executable {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "CoreText",
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics",
+                    "-Xverify-compiler=false"
+                )
+            }
+        }
+    }
+    iosX64("uikitX64") {
+        binaries {
+            executable {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "CoreText",
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics",
+                    "-Xverify-compiler=false"
+                )
+            }
+        }
+    }
     js(IR) {
         browser()
         binaries.executable()
@@ -19,12 +44,8 @@ kotlin {
 //    iosSimulatorArm64()
 
     cocoapods {
-        summary = "Shared code for the sample"
-        homepage = "https://github.com/JetBrains/compose-jb"
         ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "shared"
             isStatic = true
         }
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
@@ -54,20 +75,27 @@ kotlin {
                 implementation(compose.uiTooling)
             }
         }
-        val iosArm64Main by getting {
+        val nativeMain by creating {
+            dependsOn(commonMain)
+        }
+        val uikitMain by creating {
+            dependsOn(nativeMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${libs.versions.ktor.get()}")
+            }
+        }
+        val uikitArm64Main by getting {
+            dependsOn(uikitMain)
+            dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:${libs.versions.coroutines.get()}")
             }
         }
-//        val iosTest by getting
-//        val iosSimulatorArm64Main by getting {
-//            dependsOn(iosMain)
-//        }
-//        val iosSimulatorArm64Test by getting {
-//            dependsOn(iosTest)
-//        }
-
+        val uikitX64Main by getting {
+            dependsOn(uikitMain)
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:${libs.versions.coroutines.get()}")
+            }
+        }
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
@@ -78,7 +106,7 @@ kotlin {
             }
         }
         val jsMain by getting {
-            dependencies{
+            dependencies {
                 implementation(compose.ui)
                 implementation(compose.web.core)
                 implementation(compose.runtime)
@@ -106,6 +134,21 @@ android {
 
 compose.experimental {
     web.application {}
+    uikit.application {
+        bundleIdPrefix = "com.plauzeware"
+        projectName = "compose_mp_ios"
+        deployConfigurations {
+            simulator("IPhone13") {
+                //Usage: ./gradlew iosDeployIPhone8Debug
+                device = org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13_PRO
+            }
+            connectedDevice("Device") {
+                //First need specify your teamId here, or in local.properties (compose.ios.teamId=***)
+                teamId = "***"
+                //Usage: ./gradlew iosDeployDeviceRelease
+            }
+        }
+    }
 }
 
 
