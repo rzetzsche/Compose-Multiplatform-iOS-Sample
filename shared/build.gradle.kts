@@ -1,5 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -39,30 +37,11 @@ kotlin {
             }
         }
     }
-    macosX64 {
-        binaries {
-            executable {
-                entryPoint = "main"
-                freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
-                )
-            }
-        }
-    }
-    macosArm64 {
-        binaries {
-            executable {
-                entryPoint = "main"
-                freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
-                )
-            }
-        }
-    }
     js(IR) {
         browser()
         binaries.executable()
     }
+//    iosSimulatorArm64()
 
     cocoapods {
         ios.deploymentTarget = "14.1"
@@ -99,15 +78,6 @@ kotlin {
         val nativeMain by creating {
             dependsOn(commonMain)
         }
-        val macosMain by creating {
-            dependsOn(nativeMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(macosMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(macosMain)
-        }
         val uikitMain by creating {
             dependsOn(nativeMain)
             dependencies {
@@ -131,7 +101,6 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
-                implementation(compose.desktop.currentOs)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${libs.versions.coroutines.get()}")
                 implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}")
             }
@@ -163,37 +132,22 @@ android {
     }
 }
 
-compose {
-    desktop {
-        application {
-            mainClass = "Main_desktopKt"
-
-            nativeDistributions {
-                targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-                packageName = "SampleApp"
-                packageVersion = "1.0.0"
+compose.experimental {
+    web.application {}
+    uikit.application {
+        bundleIdPrefix = "com.plauzeware"
+        projectName = "compose_mp_ios"
+        deployConfigurations {
+            simulator("IPhone13") {
+                //Usage: ./gradlew iosDeployIPhone8Debug
+                device = org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13_PRO
+            }
+            connectedDevice("Device") {
+                //First need specify your teamId here, or in local.properties (compose.ios.teamId=***)
+                teamId = "***"
+                //Usage: ./gradlew iosDeployDeviceRelease
             }
         }
-    }
-
-    experimental {
-        web.application {}
-        uikit.application {
-            bundleIdPrefix = "com.plauzeware"
-            projectName = "compose_mp_ios"
-            deployConfigurations {
-                simulator("IPhone13") {
-                    //Usage: ./gradlew iosDeployIPhone8Debug
-                    device = org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13_PRO
-                }
-                connectedDevice("Device") {
-                    //First need specify your teamId here, or in local.properties (compose.ios.teamId=***)
-                    teamId = "***"
-                    //Usage: ./gradlew iosDeployDeviceRelease
-                }
-            }
-        }
-
     }
 }
 
