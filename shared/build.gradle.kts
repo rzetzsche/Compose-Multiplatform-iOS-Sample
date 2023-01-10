@@ -39,6 +39,26 @@ kotlin {
             }
         }
     }
+    macosX64 {
+        binaries {
+            executable {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal"
+                )
+            }
+        }
+    }
+    macosArm64 {
+        binaries {
+            executable {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal"
+                )
+            }
+        }
+    }
     js(IR) {
         browser()
         binaries.executable()
@@ -83,6 +103,15 @@ kotlin {
         val nativeMain by creating {
             dependsOn(commonMain)
         }
+        val macosMain by creating {
+            dependsOn(nativeMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(macosMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(macosMain)
+        }
         val uikitMain by creating {
             dependsOn(nativeMain)
             dependencies {
@@ -106,6 +135,7 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
+                implementation(compose.desktop.currentOs)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${libs.versions.coroutines.get()}")
                 implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}")
             }
