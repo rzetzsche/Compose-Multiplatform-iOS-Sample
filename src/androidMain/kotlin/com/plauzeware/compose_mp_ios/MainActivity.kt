@@ -8,7 +8,7 @@ class MainActivity : PreComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainAndroidView()
+            App()
         }
     }
 }

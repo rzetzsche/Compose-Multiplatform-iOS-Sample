@@ -35,6 +35,7 @@ pluginManagement {
         kotlin("multiplatform").version(extra.get("kotlinVersion").toString())
         kotlin("plugin.serialization").version(extra.get("kotlinVersion").toString())
         kotlin("android").version(extra.get("kotlinVersion").toString())
+        kotlin("native.cocoapods").version(extra.get("kotlinVersion").toString())
         id("com.android.base").version(extra.get("agpVersion").toString())
         id("com.android.application").version(extra.get("agpVersion").toString())
         id("com.android.library").version(extra.get("agpVersion").toString())
@@ -45,6 +46,5 @@ pluginManagement {
 
 rootProject.name = "compose_mp_ios"
 
-include(":androidApp")
-include(":shared")
-//include(":jsApp")
+//include(":androidApp")
+//include(":shared")
