@@ -47,4 +47,4 @@ rootProject.name = "compose_mp_ios"
 
 include(":androidApp")
 include(":shared")
-//include(":jsApp")
+include(":jsApp")
